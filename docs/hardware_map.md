@@ -218,6 +218,25 @@ This block in 68K RAM tracks the adapter's current state:
 | $FF841D | Byte | SRAM write data value |
 | $FF841E | Byte | Adapter mode/state |
 
+### Initial Values (set by adapter hardware before CPU boot)
+
+On power-on, the adapter populates this block before releasing the Genesis
+from reset. The menu ROM only reads these values, never writes them.
+
+For a 2MB menu ROM dump loaded into DRAM:
+```
+$FF8400 = $00200000  (DRAM data pointer = end of loaded ROM data)
+$FF8404 = $00200000  (ROM size = 2MB)
+$FF8408 = $00000000  (game data offset = 0, menu mode)
+$FF840C = $0000      (block count = 0, initial boot)
+$FF840E = $00000000  (expected transfer length = 0)
+$FF8412 = $0000      (header source = 0, read from DRAM)
+$FF841A = $0000      (game ID = 0, no game selected)
+$FF841C = $00        (SRAM write pending = 0)
+$FF841D = $00        (SRAM write data = 0)
+$FF841E = $00        (adapter mode = 0, normal)
+```
+
 ### Capacity Check ($FF8404)
 
 The ROM checks this value against $300000 (3MB boundary):
@@ -343,3 +362,32 @@ The server replaces the cable headend. It needs to:
 2. Serve game catalog (replaces game guide BINs)
 3. Stream ROM data on game selection (fills DRAM via data port)
 4. Handle serial-channel commands (tune/status) via network
+
+---
+
+## 9. SCMENU.BIN Data Format (Custom Menu Data)
+
+The SCMENU.BIN files are pure content data loaded at runtime address $100000.
+Two known dumps (615,028 bytes each) share the same structural format:
+
+- First longword: $00100434 — pointer to main data structure (file offset $434)
+- Contains category definitions ("The Arcade", "Sports Arena", "Family Room", etc.)
+- Game metadata: titles, descriptions in 4 languages (EN/FR/DE/ES)
+- Contest/promotion data ("Aim For The Games", "Prize-O-Rama")
+- Compressed graphics for menu UI
+
+**Producing custom menu data:**
+The format is straightforward enough that we can:
+1. Hex-patch an existing SCMENU.BIN to change game titles/categories
+2. Build a generator tool by diffing the two known dumps to map the format
+3. Write entirely new menu data with our own game catalog
+
+The menu ROM's code at $600C calculates entry count from the DRAM pointer:
+```asm
+move.l  $8400.w, d0       ; End of data pointer
+subi.l  #$100000, d0       ; Subtract data area base
+divu.w  #$f6, d0           ; Divide by 246 = entry count
+```
+
+Each menu entry is 246 ($F6) bytes. The SCMENU.BIN format is essentially
+a flat array of fixed-size records starting at $100000 + some header.
