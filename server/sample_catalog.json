@@ -1,0 +1,36 @@
+{
+  "categories": [
+    {
+      "name": "The Arcade",
+      "games": [
+        {"id": 1, "title": "Sonic the Hedgehog 2", "description": "Blast through zones at supersonic speed! Sonic and Tails team up to stop Dr. Robotnik."},
+        {"id": 2, "title": "Streets of Rage 2", "description": "Fight your way through the streets in this classic beat-em-up. Up to 2 players!"},
+        {"id": 3, "title": "Gunstar Heroes", "description": "Non-stop action! Run, gun and grab your way through insane boss battles."},
+        {"id": 4, "title": "Contra: Hard Corps", "description": "Intense run-and-gun action with multiple characters and branching paths."}
+      ]
+    },
+    {
+      "name": "Sports Arena",
+      "games": [
+        {"id": 5, "title": "NBA Jam", "description": "He's on fire! Over-the-top 2-on-2 basketball action."},
+        {"id": 6, "title": "FIFA Soccer '95", "description": "Hit the pitch in this classic soccer simulation."},
+        {"id": 7, "title": "World Series Baseball", "description": "Take the field in this realistic baseball simulation."}
+      ]
+    },
+    {
+      "name": "Strategy Room",
+      "games": [
+        {"id": 8, "title": "Shining Force II", "description": "Epic tactical RPG. Lead your army against the forces of darkness."},
+        {"id": 9, "title": "Phantasy Star IV", "description": "The ultimate sci-fi RPG adventure across multiple planets."}
+      ]
+    },
+    {
+      "name": "Family Room",
+      "games": [
+        {"id": 10, "title": "Ecco the Dolphin", "description": "Explore the ocean depths in this unique underwater adventure."},
+        {"id": 11, "title": "Mega Bomberman", "description": "Blow up your friends! Classic multiplayer bomb-laying action."},
+        {"id": 12, "title": "Flicky", "description": "Rescue baby chicks in this cute and addictive arcade game."}
+      ]
+    }
+  ]
+}
