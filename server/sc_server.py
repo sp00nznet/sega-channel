@@ -31,6 +31,7 @@ import socket
 import threading
 import argparse
 import hashlib
+import zipfile
 from pathlib import Path
 
 # Protocol constants
@@ -58,7 +59,8 @@ class GameLibrary:
         self.scan_roms()
 
     def scan_roms(self):
-        """Scan the ROM directory and build the game catalog."""
+        """Scan the ROM directory and build the game catalog.
+        Supports both bare ROM files and zipped ROMs."""
         self.games = {}
         game_id = 1
 
@@ -66,50 +68,87 @@ class GameLibrary:
             print(f"[WARN] ROM directory does not exist: {self.roms_dir}")
             return
 
-        extensions = {'.bin', '.gen', '.md', '.smd'}
-        rom_files = sorted([
-            f for f in self.roms_dir.iterdir()
-            if f.is_file() and f.suffix.lower() in extensions
-        ])
+        rom_extensions = {'.bin', '.gen', '.md', '.smd'}
+        files = sorted(self.roms_dir.iterdir())
 
-        for rom_path in rom_files:
-            size = rom_path.stat().st_size
-
-            # Skip files that are too small or too large for Genesis
-            if size < 0x200 or size > 0x400000:
+        for fpath in files:
+            if not fpath.is_file():
                 continue
 
-            # Try to read the Genesis header for the title
-            title = self._read_rom_title(rom_path)
-            if not title:
-                title = rom_path.stem
-
-            self.games[game_id] = {
-                'title': title,
-                'path': rom_path,
-                'size': size,
-            }
-            game_id += 1
+            if fpath.suffix.lower() == '.zip':
+                # Zipped ROM — find the ROM file inside
+                info = self._scan_zip(fpath)
+                if info:
+                    self.games[game_id] = info
+                    game_id += 1
+            elif fpath.suffix.lower() in rom_extensions:
+                size = fpath.stat().st_size
+                if size < 0x200 or size > 0x400000:
+                    continue
+                title = self._read_rom_title_from_data(self._read_header_bytes(fpath))
+                if not title:
+                    title = fpath.stem
+                self.games[game_id] = {
+                    'title': title,
+                    'path': fpath,
+                    'zip_entry': None,
+                    'size': size,
+                }
+                game_id += 1
 
         print(f"[INFO] Loaded {len(self.games)} games from {self.roms_dir}")
-        for gid, info in self.games.items():
-            print(f"  [{gid:3d}] {info['title']} ({info['size'] / 1024:.0f} KB)")
+        for gid, info in list(self.games.items())[:20]:
+            try:
+                print(f"  [{gid:3d}] {info['title']} ({info['size'] / 1024:.0f} KB)")
+            except (UnicodeEncodeError, UnicodeDecodeError):
+                print(f"  [{gid:3d}] (title has special chars) ({info['size'] / 1024:.0f} KB)")
+        if len(self.games) > 20:
+            print(f"  ... and {len(self.games) - 20} more")
 
-    def _read_rom_title(self, path):
-        """Read the domestic title from a Genesis ROM header."""
+    def _scan_zip(self, zip_path):
+        """Scan a zip file for a Genesis ROM and return its info."""
+        rom_extensions = {'.bin', '.gen', '.md', '.smd'}
+        try:
+            with zipfile.ZipFile(zip_path, 'r') as zf:
+                for entry in zf.namelist():
+                    ext = os.path.splitext(entry)[1].lower()
+                    if ext in rom_extensions:
+                        info = zf.getinfo(entry)
+                        if info.file_size < 0x200 or info.file_size > 0x400000:
+                            continue
+                        # Read header to get title
+                        with zf.open(entry) as rf:
+                            header_data = rf.read(0x200)
+                        title = self._read_rom_title_from_data(header_data)
+                        if not title:
+                            title = os.path.splitext(os.path.basename(entry))[0]
+                        return {
+                            'title': title,
+                            'path': zip_path,
+                            'zip_entry': entry,
+                            'size': info.file_size,
+                        }
+        except Exception:
+            pass
+        return None
+
+    def _read_header_bytes(self, path):
+        """Read the first 0x200 bytes from a file."""
         try:
             with open(path, 'rb') as f:
-                f.seek(0x100)
-                header = f.read(0x30)
-                if len(header) < 0x30:
-                    return None
-                console = header[0:16].decode('ascii', errors='replace').strip()
-                if 'SEGA' not in console.upper():
-                    return None
-                title = header[0x20:0x50].decode('ascii', errors='replace').strip('\x00').strip()
-                return title if title else None
+                return f.read(0x200)
         except Exception:
+            return b''
+
+    def _read_rom_title_from_data(self, header_data):
+        """Extract the domestic title from Genesis ROM header bytes."""
+        if len(header_data) < 0x150:
             return None
+        console = header_data[0x100:0x110].decode('ascii', errors='replace').strip()
+        if 'SEGA' not in console.upper():
+            return None
+        title = header_data[0x120:0x150].decode('ascii', errors='replace').strip('\x00').strip()
+        return title if title else None
 
     def get_catalog(self):
         """Return the game catalog as a list of (id, title, size) tuples."""
@@ -120,8 +159,17 @@ class GameLibrary:
         """Read and return the ROM data for a given game ID."""
         if game_id not in self.games:
             return None
-        with open(self.games[game_id]['path'], 'rb') as f:
-            return f.read()
+        info = self.games[game_id]
+        if info.get('zip_entry'):
+            # Read from zip
+            try:
+                with zipfile.ZipFile(info['path'], 'r') as zf:
+                    return zf.read(info['zip_entry'])
+            except Exception:
+                return None
+        else:
+            with open(info['path'], 'rb') as f:
+                return f.read()
 
     def get_menudata(self):
         """Read and return the SCMENU.BIN data."""

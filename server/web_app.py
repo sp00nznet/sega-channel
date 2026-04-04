@@ -359,10 +359,11 @@ def library():
     games = []
     if lib:
         for gid, info in sorted(lib.games.items()):
+            fname = info.get('zip_entry', None) or info['path'].name
             games.append({
                 'id': gid,
                 'title': info['title'],
-                'filename': info['path'].name,
+                'filename': fname if isinstance(fname, str) else info['path'].name,
                 'size_kb': info['size'] // 1024,
             })
 
