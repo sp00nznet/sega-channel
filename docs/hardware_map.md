@@ -391,3 +391,47 @@ divu.w  #$f6, d0           ; Divide by 246 = entry count
 
 Each menu entry is 246 ($F6) bytes. The SCMENU.BIN format is essentially
 a flat array of fixed-size records starting at $100000 + some header.
+
+---
+
+## 10. ROM Layout Discovery (Canada Dec 1995)
+
+### Critical Finding: Entry Structure is in ROM Code, Not SCMENU
+
+The category and game entry structure ($0428 headers, $041C/$0308 name
+markers) is part of the **ROM code** at $000100-$000430, NOT in the
+SCMENU data at $100430+.
+
+**ROM Code Area ($000000-$0FFFFF):**
+- $000100-$000430: Category and game entries (display parameters,
+  names, pointers to expanded content)
+- Each entry has: $0428 header, display coords, cursor states,
+  $041C $0308 name marker, title text, 5 pointers, $0000 terminator
+- Categories have a 5th pointer to expanded display content
+- Game entries follow categories in display order
+
+**SCMENU Data Area ($100430-$1FFFFF):**
+- Game descriptions (English, French, German, Spanish)
+- VDP tile/graphics data
+- Palette data
+- Contest/promotion content (Prize-O-Rama, etc.)
+- The 5th pointer from category entries points INTO this area
+
+### Implication for Custom Menus
+
+You cannot add new games by just modifying SCMENU.BIN. The game
+entry STRUCTURE is in the ROM code. To create a fully custom menu:
+
+1. **Patch the ROM entries** at $000100-$000430 to change game titles
+   and pointers (limited to existing entry count)
+2. **Build a custom ROM** with a new entry structure (requires
+   understanding the display engine's entry processing code)
+3. **Generate matching SCMENU data** with descriptions and graphics
+   for the games in the custom entry structure
+
+### Category -> Game Mapping
+
+Each category's 5th pointer links to the expanded content area.
+The expanded area at that address contains the display data for
+the first game visible when entering that category. Subsequent
+games are the next entries in the ROM's linear entry list.
