@@ -1,0 +1,250 @@
+{
+  "categories": [
+    {
+      "name": "Action",
+      "games": [
+        {
+          "title": "Sonic the Hedgehog",
+          "server_id": 613
+        },
+        {
+          "title": "Sonic the Hedgehog 2",
+          "server_id": 614
+        },
+        {
+          "title": "Streets of Rage 2",
+          "server_id": 655
+        },
+        {
+          "title": "Gunstar Heroes",
+          "server_id": 287
+        },
+        {
+          "title": "Contra: Hard Corps",
+          "server_id": 149
+        },
+        {
+          "title": "Vectorman",
+          "server_id": 746
+        },
+        {
+          "title": "Shinobi III",
+          "server_id": 590
+        }
+      ]
+    },
+    {
+      "name": "Adventure",
+      "games": [
+        {
+          "title": "Earthworm Jim",
+          "server_id": 202
+        },
+        {
+          "title": "Earthworm Jim 2",
+          "server_id": 203
+        },
+        {
+          "title": "Comix Zone",
+          "server_id": 147
+        },
+        {
+          "title": "Flashback",
+          "server_id": 244
+        },
+        {
+          "title": "Castlevania Bloodlines",
+          "server_id": 116
+        }
+      ]
+    },
+    {
+      "name": "RPG",
+      "games": [
+        {
+          "title": "Phantasy Star IV",
+          "server_id": 505
+        },
+        {
+          "title": "Shining Force II",
+          "server_id": 588
+        },
+        {
+          "title": "Shining Force",
+          "server_id": 587
+        },
+        {
+          "title": "Phantasy Star II",
+          "server_id": 504
+        },
+        {
+          "title": "Sword of Vermilion",
+          "server_id": 672
+        }
+      ]
+    },
+    {
+      "name": "Sports",
+      "games": [
+        {
+          "title": "NBA Jam",
+          "server_id": 455
+        },
+        {
+          "title": "FIFA Soccer 95",
+          "server_id": 239
+        },
+        {
+          "title": "NHL 94",
+          "server_id": 468
+        },
+        {
+          "title": "Madden NFL 95",
+          "server_id": 404
+        },
+        {
+          "title": "World Series Baseball",
+          "server_id": 789
+        }
+      ]
+    },
+    {
+      "name": "Fighting",
+      "games": [
+        {
+          "title": "Mortal Kombat II",
+          "server_id": 437
+        },
+        {
+          "title": "Eternal Champions",
+          "server_id": 218
+        },
+        {
+          "title": "Virtua Fighter 2",
+          "server_id": 753
+        },
+        {
+          "title": "Street Fighter II SCE",
+          "server_id": 653
+        }
+      ]
+    },
+    {
+      "name": "Racing",
+      "games": [
+        {
+          "title": "Road Rash II",
+          "server_id": 555
+        },
+        {
+          "title": "Super Hang-On",
+          "server_id": 662
+        },
+        {
+          "title": "OutRun",
+          "server_id": 485
+        },
+        {
+          "title": "Top Gear 2",
+          "server_id": 708
+        },
+        {
+          "title": "Micro Machines 2",
+          "server_id": 424
+        }
+      ]
+    },
+    {
+      "name": "Puzzle",
+      "games": [
+        {
+          "title": "Dr. Robotnik MBM",
+          "server_id": 190
+        },
+        {
+          "title": "Columns",
+          "server_id": 144
+        },
+        {
+          "title": "Sonic Spinball",
+          "server_id": 612
+        },
+        {
+          "title": "Mega Bomberman",
+          "server_id": 416
+        }
+      ]
+    },
+    {
+      "name": "Platformer",
+      "games": [
+        {
+          "title": "Aladdin",
+          "server_id": 20
+        },
+        {
+          "title": "The Lion King",
+          "server_id": 379
+        },
+        {
+          "title": "Dynamite Headdy",
+          "server_id": 197
+        },
+        {
+          "title": "Ristar",
+          "server_id": 553
+        },
+        {
+          "title": "Rocket Knight Adventures",
+          "server_id": 558
+        }
+      ]
+    },
+    {
+      "name": "Strategy",
+      "games": [
+        {
+          "title": "Dune II",
+          "server_id": 196
+        },
+        {
+          "title": "Herzog Zwei",
+          "server_id": 302
+        },
+        {
+          "title": "Populous",
+          "server_id": 518
+        },
+        {
+          "title": "TechnoClash",
+          "server_id": 683
+        }
+      ]
+    },
+    {
+      "name": "Classics",
+      "games": [
+        {
+          "title": "Golden Axe",
+          "server_id": 273
+        },
+        {
+          "title": "Altered Beast",
+          "server_id": 22
+        },
+        {
+          "title": "Space Harrier II",
+          "server_id": 619
+        },
+        {
+          "title": "Ecco the Dolphin",
+          "server_id": 205
+        },
+        {
+          "title": "ToeJam & Earl",
+          "server_id": 705
+        }
+      ]
+    }
+  ]
+}
