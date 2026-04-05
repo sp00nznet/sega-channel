@@ -23,14 +23,14 @@ from pathlib import Path
 
 def find_entries(rom):
     """Find all $0428 entries with their title locations."""
-    marker_0428 = bytes([0x04, 0x28, 0x00, 0x16])
+    marker_0428 = bytes([0x04, 0x28])
     marker_name = bytes([0x04, 0x1C, 0x03, 0x08])
 
     entries = []
     idx = 0x100000  # Start of SCMENU data area
 
     while True:
-        idx = rom.find(marker_0428, idx, 0x130000)
+        idx = rom.find(marker_0428, idx, len(rom))
         if idx < 0:
             break
 
