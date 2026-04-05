@@ -46,7 +46,14 @@ RSP_MENUDATA = 0x03
 RSP_ERROR    = 0xFE
 RSP_PONG     = 0xFF
 
+CMD_QUEUE    = 0x04  # Query queued game ID
+
+RSP_QUEUE    = 0x04
+
 DEFAULT_PORT = 7654
+
+# Queued game ID (set by web UI, read by emulator)
+queued_game_id = 0
 
 
 class GameLibrary:
@@ -209,6 +216,8 @@ class ClientHandler:
                     self._handle_fetch()
                 elif cmd == CMD_MENUDATA:
                     self._handle_menudata()
+                elif cmd == CMD_QUEUE:
+                    self._handle_queue()
                 else:
                     self._send_error(f"Unknown command: 0x{cmd:02X}")
 
@@ -283,6 +292,14 @@ class ClientHandler:
         self.conn.sendall(header)
         self.conn.sendall(data)
         print(f"[CMD]  MENUDATA → {len(data)} bytes to {self.addr}")
+
+    def _handle_queue(self):
+        """Return the queued game ID."""
+        global queued_game_id
+        resp = struct.pack('>BH', RSP_QUEUE, queued_game_id)
+        self.conn.sendall(resp)
+        if queued_game_id > 0:
+            print(f"[CMD]  QUEUE -> game {queued_game_id} to {self.addr}")
 
     def _send_error(self, msg):
         """Send an error response."""

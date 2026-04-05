@@ -189,6 +189,22 @@ DASHBOARD_PAGE = LAYOUT.replace('{% block content %}{% endblock %}', '''
     {% endif %}
   </table>
 </div>
+
+<div class="card">
+  <h2>Queue Game for Play</h2>
+  <p style="color: #667799; margin-bottom: 12px;">Select a game here, then choose any game in the Sega Channel menu to load it.</p>
+  <form method="POST" action="/queue">
+    <select name="game_id" style="width: 400px;">
+      {% for game in games %}
+      <option value="{{ game.id }}" {{ 'selected' if game.id == queued_id }}>{{ game.id }}. {{ game.title }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-success" type="submit">Queue</button>
+    {% if queued_id > 0 %}
+    <span style="color: #44cc44; margin-left: 12px;">Queued: #{{ queued_id }}</span>
+    {% endif %}
+  </form>
+</div>
 ''')
 
 LIBRARY_PAGE = LAYOUT.replace('{% block content %}{% endblock %}', '''
@@ -329,6 +345,7 @@ def dashboard():
     flash_msg = request.args.get('flash', '')
     flash_type = request.args.get('flash_type', 'success')
 
+    import sc_server
     return render_template_string(DASHBOARD_PAGE,
         page='dashboard',
         running=server_state['running'],
@@ -337,9 +354,17 @@ def dashboard():
         game_count=len(games),
         total_size_mb=f"{total_size / 1048576:.1f}",
         games=games,
+        queued_id=sc_server.queued_game_id,
         flash=flash_msg,
         flash_type=flash_type,
     )
+
+@app.route('/queue', methods=['POST'])
+def queue_game():
+    import sc_server
+    game_id = int(request.form.get('game_id', 0))
+    sc_server.queued_game_id = game_id
+    return redirect(url_for('dashboard', flash=f'Queued game #{game_id}', flash_type='success'))
 
 @app.route('/server/start', methods=['POST'])
 def server_start():
