@@ -294,12 +294,13 @@ class ClientHandler:
         print(f"[CMD]  MENUDATA → {len(data)} bytes to {self.addr}")
 
     def _handle_queue(self):
-        """Return the queued game ID."""
+        """Return and clear the queued game ID (one-shot)."""
         global queued_game_id
         resp = struct.pack('>BH', RSP_QUEUE, queued_game_id)
         self.conn.sendall(resp)
         if queued_game_id > 0:
-            print(f"[CMD]  QUEUE -> game {queued_game_id} to {self.addr}")
+            print(f"[CMD]  QUEUE -> game {queued_game_id} to {self.addr} (cleared)")
+            queued_game_id = 0  # One-shot: clear after reading
 
     def _send_error(self, msg):
         """Send an error response."""

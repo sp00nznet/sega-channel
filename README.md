@@ -2,11 +2,20 @@
 
 **Bringing back the magic of Sega Channel -- the world's first video game streaming service.**
 
-![Custom Menus in Sega Channel](docs/custommenus.png)
+![Custom Menus - Movie Theater Theme](docs/custommenus_theater.png)
 
 Back in 1994, Sega did something nobody else was doing: they streamed Genesis games directly to your TV through your cable connection. No cartridges. No trips to the store. Just a special adapter in your cartridge slot, a monthly subscription, and 50 games rotating every month. It was actual magic.
 
 This project reverse-engineers the Sega Channel adapter hardware and builds a modern backend server so the original menu ROMs can browse, select, and play games -- streamed from your own collection.
+
+## Custom Menus on Real Sega Channel ROMs
+
+The ROM patcher works with any of the original monthly menu ROMs, each with its own seasonal theme:
+
+![Dragon & Knight Theme](docs/custommenus_dragon.png)
+![Snowboarding Theme](docs/custommenus_snow.png)
+
+Every month brought a different look -- medieval castles with knights and dragons, snowboarding mountains, movie theaters, spinning pumpkins for Halloween, autumn leaves for Thanksgiving. The ROM patcher preserves all of these original animations and graphics while letting you customize the game list.
 
 ## What's Here
 
@@ -21,11 +30,11 @@ A Python server that replaces the cable TV headend. It serves your ROM library t
 ![Web Server Dashboard](docs/webserver.png)
 
 ### ROM Patcher (`tools/rom_patcher.py`)
-Patches any Sega Channel menu ROM to display your own custom categories and game titles. The original display engine, graphics, and Sega Channel animations are preserved -- only the text changes.
+Patches any Sega Channel menu ROM to display your own custom categories and game titles. Works with all known SC ROM variants -- US, Canadian, PAL, and prototype menus.
 
 ```bash
 python tools/rom_patcher.py \
-  --rom "Canada Menu Demo December 1995.BIN" \
+  --rom "US Menu Demo 1997C.BIN" \
   --catalog server/patch_catalog.json \
   --output SegaChannel_Custom.bin
 ```
@@ -59,7 +68,7 @@ SC_SERVER_HOST=127.0.0.1 SC_SERVER_PORT=7654 \
 
 ## The Sega Channel Experience
 
-If you were lucky enough to have Sega Channel as a kid, you remember the rotating monthly menus -- each one themed for the season. Spinning pumpkins for Halloween. Turkeys and autumn leaves for Thanksgiving. Every month brought new games and a fresh look.
+If you were lucky enough to have Sega Channel as a kid, you remember the rotating monthly menus -- each one themed for the season. Spinning pumpkins for Halloween. Knights and dragons. Snowboarders carving down mountains. A movie theater marquee. Every month brought new games and a fresh look.
 
 You remember browsing categories like **"The Arcade"**, **"Sports Arena"**, **"The Dungeon"** and picking from 50 games that were right there, ready to play. No waiting for downloads (okay, maybe a little). No cartridge swapping. Just pure, streamed Genesis gaming.
 
