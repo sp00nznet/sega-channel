@@ -35,9 +35,9 @@ Complete reverse-engineering of the Sega Channel adapter:
 
 - **Register map**: Bank switching ($A130F0-FA), data port ($A13040), status ($A13042), SRAM overlay
 - **Serial protocol**: Adapter-to-tuner communication via Genesis serial port
-- **Comm buffer**: $FFE1A8 protocol for game selection and download signaling  
+- **Comm buffer**: $FFE1A8 protocol for game selection and download signaling
 - **SCMENU.BIN format**: Entry table structure, category/game records, pointer layout
-- **Bytecode interpreter**: Pacific SoftScape's display engine and script system
+- **Entry table**: Full mapping of all 160 entries (10 categories, 50 games, 100+ expanded content blocks)
 
 All decoded from the original ROM dumps using Python + Capstone m68k disassembler.
 
@@ -59,13 +59,9 @@ SC_SERVER_HOST=127.0.0.1 SC_SERVER_PORT=7654 \
 
 ## The Sega Channel Experience
 
-If you were lucky enough to have Sega Channel as a kid, you remember:
+If you were lucky enough to have Sega Channel as a kid, you remember the rotating monthly menus -- each one themed for the season. Spinning pumpkins for Halloween. Turkeys and autumn leaves for Thanksgiving. Every month brought new games and a fresh look.
 
-- The **Thanksgiving menu** with its autumn leaves and turkey
-- Browsing categories like **"The Arcade"**, **"Sports Arena"**, **"The Dungeon"**
-- The download screen showing game tips while your game loaded
-- Playing **Jeopardy** with your family, streamed from the local cable company
-- That feeling when the monthly lineup changed and there were new games
+You remember browsing categories like **"The Arcade"**, **"Sports Arena"**, **"The Dungeon"** and picking from 50 games that were right there, ready to play. No waiting for downloads (okay, maybe a little). No cartridge swapping. Just pure, streamed Genesis gaming.
 
 This project exists to celebrate all of that. Sega Channel was a beautiful oddity -- way ahead of its time, gone too soon, and remembered fondly by everyone who had one.
 
@@ -81,16 +77,34 @@ This project exists to celebrate all of that. Sega Channel was a beautiful oddit
                                             Backspace = return to menu
 ```
 
+## Credits & Acknowledgments
+
+### ROM Preservation
+
+None of this would be possible without the incredible work of the **[Video Game History Foundation (VGHF)](https://gamehistory.org/segachannel/)** and their collaborators who recovered **144 unique Sega Channel ROMs** -- system menus, exclusive games, prototypes, and variants that were very nearly lost forever.
+
+Special thanks to:
+
+- **Michael Shorrock** -- Former Sega Channel Vice President of Programming, who donated his personal collection
+- **Ray ("Sega Channel Guy")** -- Community member who tracked down former Sega Channel staff and obtained tape backups containing the original data
+- **Chuck Guzis / Sydex** -- Data tape expert who digitized Ray's tape backups (in memoriam)
+- **RisingFromRuins & Nathan Misner (infochunk)** -- Cracked the Sega Channel data formats to extract the ROMs
+- **Dustin Hubbard (Hubz) / [Gaming Alexandria](https://www.gamingalexandria.com/)** -- Hosts and shares the recovered ROM data
+- **[Sega Retro](https://segaretro.org/)**, **[The Cutting Room Floor](https://tcrf.net/)**, and **[Hidden Palace](https://hiddenpalace.org/)** -- For documenting everything known about Sega Channel
+
+The full story: ["Don't Just Watch TV: The Secrets of Sega Channel"](https://gamehistory.org/segachannel/) by Phil Salvador, VGHF.
+
+### Original Development
+
+The Sega Channel system software was developed by **Pacific SoftScape Inc.** (1994-1997).
+
+Sega Channel was a joint venture between Sega of America, Time Warner Cable, and TCI. The service operated from 1994 to 1998.
+
 ## Related
 
 - **[Genesis Plus GX - Sega Channel Fork](https://github.com/sp00nznet/genesis-plus-gx-sega-channel)** -- Our emulator fork with the Sega Channel adapter mapper
 - **[SGDK](https://github.com/Stephane-D/sgdk)** -- Sega Genesis Development Kit (stretch goal: custom SC ROM from scratch)
-
-## Credits
-
-Reverse-engineered from Sega Channel menu ROM dumps originally developed by **Pacific SoftScape Inc.** (1994-1997).
-
-Sega Channel was a joint venture between Sega, Time Warner Cable, and TCI.
+- **[VGHF Sega Channel Article](https://gamehistory.org/segachannel/)** -- The full preservation story
 
 ---
 
