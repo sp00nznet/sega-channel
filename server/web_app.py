@@ -172,7 +172,26 @@ DASHBOARD_PAGE = LAYOUT.replace('{% block content %}{% endblock %}', '''
 </div>
 
 <div class="card">
-  <h2>Game Library</h2>
+  <h2>Queue Game for Play</h2>
+  <p style="color: #667799; margin-bottom: 12px;">Select a game here, then choose any game in the Sega Channel menu to load it.</p>
+  <form method="POST" action="/queue" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <select name="game_id" style="width: 400px; flex-shrink: 0;">
+      {% for game in games %}
+      <option value="{{ game.id }}" {{ 'selected' if game.id == queued_id }}>{{ game.id }}. {{ game.title }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-success" type="submit">Queue</button>
+    {% if queued_id > 0 %}
+    <span style="color: #44cc44;">Queued: #{{ queued_id }}</span>
+    {% endif %}
+  </form>
+</div>
+
+<div class="card">
+  <h2 style="cursor: pointer;" onclick="var el=document.getElementById('game-lib'); el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.querySelector('span').textContent = el.style.display === 'none' ? '+' : '-';">
+    Game Library ({{ games|length }}) <span style="float:right; font-size: 20px;">-</span>
+  </h2>
+  <div id="game-lib" style="max-height: 400px; overflow-y: auto;">
   <table>
     <tr><th>#</th><th>Title</th><th>Size</th></tr>
     {% for game in games %}
@@ -188,22 +207,7 @@ DASHBOARD_PAGE = LAYOUT.replace('{% block content %}{% endblock %}', '''
     </td></tr>
     {% endif %}
   </table>
-</div>
-
-<div class="card">
-  <h2>Queue Game for Play</h2>
-  <p style="color: #667799; margin-bottom: 12px;">Select a game here, then choose any game in the Sega Channel menu to load it.</p>
-  <form method="POST" action="/queue">
-    <select name="game_id" style="width: 400px;">
-      {% for game in games %}
-      <option value="{{ game.id }}" {{ 'selected' if game.id == queued_id }}>{{ game.id }}. {{ game.title }}</option>
-      {% endfor %}
-    </select>
-    <button class="btn btn-success" type="submit">Queue</button>
-    {% if queued_id > 0 %}
-    <span style="color: #44cc44; margin-left: 12px;">Queued: #{{ queued_id }}</span>
-    {% endif %}
-  </form>
+  </div>
 </div>
 ''')
 
