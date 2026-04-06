@@ -29,8 +29,20 @@ A Python server that replaces the cable TV headend. It serves your ROM library t
 
 ![Web Server Dashboard](docs/webserver.png)
 
+### Visual ROM Editor (Web UI)
+Upload any Sega Channel menu ROM and edit it visually in your browser. The editor shows the full menu structure — categories on the left, edit panel on the right. Click any entry to rename it, assign a game from your 810+ ROM library, and export the patched ROM.
+
+- Upload any SC menu ROM (US, Canadian, PAL, prototype)
+- See all 60 entries: 10 categories + 50 games, color-coded
+- Edit titles with live character count vs field limit
+- Assign server game IDs from a searchable dropdown
+- Export patched ROM — preserves original theme and animations
+- Works with all monthly menu variants (dragon, snowboard, theater, pumpkins...)
+
+Access at `http://localhost:8080/editor`
+
 ### ROM Patcher (`tools/rom_patcher.py`)
-Patches any Sega Channel menu ROM to display your own custom categories and game titles. Works with all known SC ROM variants -- US, Canadian, PAL, and prototype menus.
+Command-line tool for batch patching. Takes a JSON catalog and patches all entries at once. Works with all known SC ROM variants.
 
 ```bash
 python tools/rom_patcher.py \
