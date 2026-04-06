@@ -32,6 +32,10 @@ from sc_server import GameLibrary, SegaChannelServer
 
 app = Flask(__name__)
 
+# Register ROM editor blueprint
+from rom_editor import rom_editor
+app.register_blueprint(rom_editor)
+
 # Global state
 server_state = {
     'library': None,
@@ -111,6 +115,7 @@ LAYOUT = '''
   <a href="/library" class="{{ 'active' if page == 'library' }}">ROM Library</a>
   <a href="/catalog" class="{{ 'active' if page == 'catalog' }}">Catalog Editor</a>
   <a href="/generator" class="{{ 'active' if page == 'generator' }}">Menu Generator</a>
+  <a href="/editor" class="{{ 'active' if page == 'editor' }}">ROM Editor</a>
 </nav>
 <div class="container">
 {% block content %}{% endblock %}
